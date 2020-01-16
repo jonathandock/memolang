@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Vocabulary</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="terms$ | async as terms; else noTerms">
+    <ion-list>
+      <ion-item *ngFor="let word of translations$ | async">{{ word.value }}</ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-template #noTerms>
+    <p class="ion-text-center">No translations</p>
+  </ng-template>
+
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "memolang",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

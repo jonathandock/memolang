@@ -1,0 +1,8 @@
+{
+  "appId": "com.jodock.memolang",
+  "appName": "Memolang",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
