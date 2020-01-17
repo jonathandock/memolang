@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, Validators, FormArray, FormGroup } from "@angular/forms";
 import { GLOBALS } from "src/environments/globals";
 import { ETermType, EPrepositionType } from "src/app/models/term.models";
-import { EGender } from "src/app/models/gender.models";
-import { EVerbType } from 'src/app/models/verb.models';
+import { EGender, EGenderType } from "src/app/models/gender.models";
+import { EVerbType, EAuxiliary } from "src/app/models/verb.models";
+import * as _ from "lodash";
 
 @Component({
   selector: "app-form",
@@ -11,39 +12,70 @@ import { EVerbType } from 'src/app/models/verb.models';
   styleUrls: ["./form.page.scss"]
 })
 export class FormPage implements OnInit {
+  @ViewChild("form", { static: false }) form: HTMLFormElement;
+
   public prepTypesList = GLOBALS.PREPOSITION_TYPES_LIST;
   public termTypesList = GLOBALS.TERM_TYPES_LIST;
   public verbTypesList = GLOBALS.VERB_TYPES_LIST;
+  public auxiliariesList = GLOBALS.AUXILIARY_LIST;
   public gendersList = GLOBALS.GENDERS_LIST;
 
-  public newTermForm = this.formBuilder.group({
+  public newTermForm: FormGroup = this.formBuilder.group({
     type: [ETermType.Name, Validators.required],
     term: ["", Validators.required],
     translation: ["", Validators.required],
     gender: [EGender.None],
-    followedBy: [EPrepositionType.Accusative, Validators.required],
+    followedBy: [EPrepositionType.Accusative],
     conjugation: this.formBuilder.group({
-      infinitive: ['', Validators.required],
-      presentParticiple: ['', Validators.required],
-      pastParticiple: ['', Validators.required]
-    }, Validators.required),
+      presentParticiple: [""],
+      pastParticiple: [""],
+      auxiliary: [EAuxiliary.Haben]
+    }),
     verbType: [EVerbType.Regular],
     examples: this.formBuilder.array([this.formBuilder.control("")])
   });
-  public examples: FormArray;
 
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.setValidators();
-    console.log(this.newTermForm);
+  }
+
+  /**
+   * Some getters of form fields
+   */
+  get type() {
+    return this.newTermForm.get("type");
+  }
+  get term() {
+    return this.newTermForm.get("term");
+  }
+  get translation() {
+    return this.newTermForm.get("translation");
+  }
+  get gender() {
+    return this.newTermForm.get("gender");
+  }
+  get followedBy() {
+    return this.newTermForm.get("followedBy");
+  }
+  get conjugation() {
+    return this.newTermForm.get("conjugation");
+  }
+  get verbType() {
+    return this.newTermForm.get("verbType");
+  }
+  get auxiliary() {
+    return this.conjugation.get("auxiliary");
+  }
+  get examples() {
+    return this.newTermForm.get("examples") as FormArray;
   }
 
   /**
    * Add an example in form array
    */
   public addExample(): void {
-    this.examples = this.newTermForm.get("examples") as FormArray;
     this.examples.push(this.formBuilder.control(""));
   }
 
@@ -52,54 +84,89 @@ export class FormPage implements OnInit {
    * @param index
    */
   public removeExample(index: number): void {
-    this.examples = this.newTermForm.get("examples") as FormArray;
     this.examples.removeAt(index);
+  }
+
+  /**
+   * Unset the gender
+   */
+  public unsetGender() {
+    this.gender.setValue(EGenderType.None);
   }
 
   /**
    * Submit form
    */
   public onSubmit() {
-    console.log(this.newTermForm);
+    console.log(this.newTermForm.valid, this.newTermForm);
+  }
+
+  /**
+   * Cancel form
+   */
+  public cancel() {
+
+    // Hacky reset
+    while (this.examples.length) {
+      this.examples.removeAt(0);
+    }
+
+    // Insert one control to reset array of examples
+    this.examples.insert(0, this.formBuilder.control(""));
+
+    this.newTermForm.reset({
+      type: ETermType.Name,
+      term: "",
+      translation: "",
+      gender: EGender.None,
+      followedBy: EPrepositionType.Accusative,
+      conjugation: {
+        presentParticiple: "",
+        pastParticiple: "",
+        auxiliary: EAuxiliary.Haben
+      },
+      verbType: EVerbType.Regular
+    });
   }
 
   /**
    * Set validators according to the selected term type
    */
   private setValidators() {
-
-    const genderField = this.newTermForm.get("gender");
-    const prepTypeField = this.newTermForm.get("followedBy");
-    const conjugationGrp = this.newTermForm.get("conjugation");
-    const verbType = this.newTermForm.get("verbType");
-
-    prepTypeField.disable();
-    conjugationGrp.disable();
-    verbType.disable();
+    this.followedBy.disable();
+    this.conjugation.disable();
+    this.verbType.disable();
 
     // Listen to changes on type field
     this.newTermForm.get("type").valueChanges.subscribe((type: string) => {
-
       if (type === ETermType.Name) {
-        genderField.enable();
-        genderField.setValue(EGender.None);
+        this.gender.enable();
+        this.gender.setValue(EGender.None);
+        this.gender.setValidators(Validators.required);
       } else {
-        genderField.disable();
+        this.gender.clearValidators();
+        this.gender.disable();
       }
 
       if (type === ETermType.Preposition) {
-        prepTypeField.enable();
-        prepTypeField.setValue(EPrepositionType.Accusative);
+        this.followedBy.enable();
+        this.followedBy.setValue(EPrepositionType.Accusative);
+        this.followedBy.setValidators(Validators.required);
       } else {
-        prepTypeField.disable();
+        this.followedBy.disable();
+        this.followedBy.clearValidators();
       }
 
       if (type === ETermType.Verb) {
-        conjugationGrp.enable();
-        verbType.enable();
+        this.conjugation.enable();
+        this.conjugation.get("auxiliary").setValidators(Validators.required);
+        this.verbType.enable();
+        this.verbType.setValidators(Validators.required);
       } else {
-        conjugationGrp.disable();
-        verbType.disable();
+        this.conjugation.disable();
+        this.conjugation.get("auxiliary").clearValidators();
+        this.verbType.disable();
+        this.verbType.clearValidators();
       }
     });
   }

@@ -2,7 +2,8 @@ import { ITerm } from "./term.models";
 
 export interface IVerb extends ITerm {
   verbType: EVerbType;
-  conjugation: IConjugation;
+  conjugation?: IConjugation;
+  auxiliary: EAuxiliary;
 }
 
 export enum EVerbType {
@@ -11,7 +12,12 @@ export enum EVerbType {
 }
 
 export interface IConjugation {
-  infinitive: string;
   presentParticiple?: string;
   pastParticiple?: string;
+}
+
+export enum EAuxiliary {
+  Sein = "sein",
+  Haben = "haben",
+  Both = "both"
 }

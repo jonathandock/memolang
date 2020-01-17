@@ -3,12 +3,24 @@ import { AddTerm } from "./vocabulary.actions";
 
 export class VocabularyStateModel {
   terms: any[];
+  newTermForm: {
+    model: string;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
 }
 
 @State<VocabularyStateModel>({
   name: "vocabulary",
   defaults: {
-    terms: []
+    terms: [],
+    newTermForm: {
+      model: undefined,
+      dirty: false,
+      status: "",
+      errors: {}
+    }
   }
 })
 export class VocabularyState {

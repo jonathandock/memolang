@@ -1,11 +1,17 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="secondary">
+      <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
     <ion-title>Form</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button type="submit" [disabled]="!newTermForm.valid" (click)="form.onSubmit()">Save</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="newTermForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="newTermForm" (ngSubmit)="onSubmit()" ngxsForm="vocabulary.newTermForm" #form>
     <ion-list class="ion-no-padding ion-no-margin">
       <!-- TERM TYPE -->
       <ion-item lines="none">
@@ -17,7 +23,7 @@
         </ion-select>
       </ion-item>
 
-      <!-- VERB TYPE - only if type is verb -->
+      <!-- VERB TYPE - only if type is verb - required -->
       <ion-item  lines="none" *ngIf="!newTermForm.controls.conjugation.disabled">
         <ion-toolbar>
           <ion-segment formControlName="verbType">
@@ -30,16 +36,36 @@
         </ion-toolbar>
       </ion-item>
       
-      <!-- TERM + TRANSLATION -->
+      <!-- TERM + TRANSLATION - required -->
       <ion-item-divider color="light">
         <ion-label>New {{newTermForm.controls.type.value}}</ion-label>
       </ion-item-divider>
+
       <ion-item>
-        <ion-label position="stacked">{{newTermForm.controls.type.value | titlecase}}</ion-label>
+        <ion-label position="stacked">
+          {{newTermForm.controls.type.value | titlecase}}
+          <ion-text color="danger">*</ion-text>
+          <!-- Validator -->
+          <ng-container *ngIf="term.invalid && (term.dirty || term.touched)">
+            <ion-text class="ion-margin-start" color="danger" *ngIf="term.errors.required">
+              <b>{{newTermForm.controls.type.value}}</b> is required
+            </ion-text>
+          </ng-container>
+        </ion-label>
         <ion-input formControlName="term"></ion-input>
       </ion-item>
+
       <ion-item>
-        <ion-label position="stacked">Translation</ion-label>
+        <ion-label position="stacked">
+          Translation
+          <ion-text color="danger">*</ion-text>
+          <!-- Validator -->
+          <ng-container *ngIf="translation.invalid && (translation.dirty || translation.touched)">
+            <ion-text class="ion-margin-start" color="danger" *ngIf="translation.errors.required">
+              <b>translation</b> is required
+            </ion-text>
+          </ng-container>
+        </ion-label>
         <ion-input formControlName="translation"></ion-input>
       </ion-item>
 
@@ -47,6 +73,9 @@
       <ion-radio-group *ngIf="!newTermForm.controls.gender.disabled" formControlName="gender">
         <ion-item-divider color="light">
           <ion-label>Gender</ion-label>
+          <ion-button slot="end" fill="clear" (click)="unsetGender()">
+            none
+          </ion-button>
         </ion-item-divider>
         <ion-item *ngFor="let gender of gendersList">
           <ion-label>{{gender.value}}</ion-label>
@@ -54,10 +83,19 @@
         </ion-item>
       </ion-radio-group>
 
-      <!-- FOLLOWEDBY - only if type is preposition -->
+      <!-- FOLLOWEDBY - only if type is preposition - required -->
       <ion-radio-group *ngIf="!newTermForm.controls.followedBy.disabled" formControlName="followedBy">
         <ion-item-divider color="light">
-          <ion-label>Preposition followed by</ion-label>
+          <ion-label>
+            Preposition followed by
+            <ion-text color="danger">*</ion-text>
+            <!-- Validator -->
+            <ng-container *ngIf="followedBy.invalid && (followedBy.dirty || followedBy.touched)">
+              <ion-text class="ion-margin-start" color="danger" *ngIf="followedBy.errors.required">
+                <b>preposition type</b> is required
+              </ion-text>
+            </ng-container>
+          </ion-label>
         </ion-item-divider>
         <ion-item *ngFor="let prepType of prepTypesList">
           <ion-label>{{prepType}}</ion-label>
@@ -72,10 +110,6 @@
         <ion-label>Conjugation</ion-label>
       </ion-item-divider>
       <ion-item>
-        <ion-label position="stacked">Infinitive</ion-label>
-        <ion-input formControlName="infinitive"></ion-input>
-      </ion-item>
-      <ion-item>
         <ion-label position="stacked">Present participle</ion-label>
         <ion-input formControlName="presentParticiple"></ion-input>
       </ion-item>
@@ -83,10 +117,35 @@
         <ion-label position="stacked">Past participle</ion-label>
         <ion-input formControlName="pastParticiple"></ion-input>
       </ion-item>
+
+      <ion-item-divider color="light">
+        <ion-label>
+          Auxiliary<ion-text color="danger">*</ion-text>
+          <!-- Validator -->
+          <ng-container *ngIf="auxiliary.invalid && (auxiliary.dirty || auxiliary.touched)">
+            <ion-text class="ion-margin-start" color="danger" *ngIf="auxiliary.errors.required">
+              <b>auxiliary</b> is required
+            </ion-text>
+          </ng-container>
+        </ion-label>
+      </ion-item-divider>
+      <ion-radio-group formControlName="auxiliary">
+        <ion-item *ngFor="let auxiliary of auxiliariesList">
+          <ion-label>{{auxiliary}}</ion-label>
+          <ion-radio [value]="auxiliary"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
     </ion-list>
 
     <!-- EXAMPLES -->
-    <ion-list class="ion-no-padding ion-no-margin" formArrayName="examples">
+    <ion-list class="ion-no-padding ion-no-margin ion-margin-bottom" formArrayName="examples">
+      <!-- <ion-item-divider color="light">
+        <ion-label>Notes</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-textarea placeholder="Your notes on this {{newTermForm.controls.type.value}}"></ion-textarea>
+      </ion-item> -->
+
       <ion-item-divider color="light">
         <ion-label>Examples</ion-label>
         <ion-button slot="end" fill="clear" (click)="addExample()">
@@ -105,11 +164,6 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
-
-    <div class="ion-padding ion-text-end">
-      <ion-button type="submit">Save</ion-button>
-    </div>
-    
   </form>
-
 </ion-content>
+

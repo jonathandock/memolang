@@ -5,6 +5,7 @@ export interface ITerm {
   translation: string;
   type: ETermType;
   examples?: string[];
+  notes?: string;
   createdDate: number;
   lastModified: number;
 }
