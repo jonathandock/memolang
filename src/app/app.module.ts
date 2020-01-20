@@ -25,7 +25,9 @@ import { VocabularyState } from 'src/shared/vocabulary/vocabulary.state';
     IonicModule.forRoot(),
     AppRoutingModule,
     NgxsModule.forRoot([VocabularyState], { developmentMode: !environment.production }),
-    NgxsStoragePluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot({
+      key: VocabularyState
+    }),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot()

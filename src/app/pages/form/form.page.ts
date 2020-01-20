@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, Validators, FormArray, FormGroup } from "@angular/forms";
 import { GLOBALS } from "src/environments/globals";
-import { ETermType, EPrepositionType } from "src/app/models/term.models";
+import { ETermType, EPrepositionType, ITerm, IName, IPreposition } from "src/app/models/term.models";
 import { EGender, EGenderType } from "src/app/models/gender.models";
-import { EVerbType, EAuxiliary } from "src/app/models/verb.models";
+import { EVerbType, EAuxiliary, IVerb } from "src/app/models/verb.models";
 import * as _ from "lodash";
+import { Store } from '@ngxs/store';
+import { AddTerm } from 'src/shared/vocabulary/vocabulary.actions';
 
 @Component({
   selector: "app-form",
@@ -24,7 +26,7 @@ export class FormPage implements OnInit {
     type: [ETermType.Name, Validators.required],
     term: ["", Validators.required],
     translation: ["", Validators.required],
-    gender: [EGender.None],
+    gender: [EGender.none],
     followedBy: [EPrepositionType.Accusative],
     conjugation: this.formBuilder.group({
       presentParticiple: [""],
@@ -35,10 +37,10 @@ export class FormPage implements OnInit {
     examples: this.formBuilder.array([this.formBuilder.control("")])
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private store: Store) {}
 
   ngOnInit() {
-    this.setValidators();
+    this._setValidators();
   }
 
   /**
@@ -91,7 +93,7 @@ export class FormPage implements OnInit {
    * Unset the gender
    */
   public unsetGender() {
-    this.gender.setValue(EGenderType.None);
+    this.gender.setValue(EGender.none);
   }
 
   /**
@@ -99,6 +101,13 @@ export class FormPage implements OnInit {
    */
   public onSubmit() {
     console.log(this.newTermForm.valid, this.newTermForm);
+    if (this.newTermForm.valid) {
+      this.store.dispatch(new AddTerm(this._formatForm(this.newTermForm.value))).subscribe(() => {
+        this.cancel();
+      });
+    } else {
+      alert('Form not valid');
+    }
   }
 
   /**
@@ -118,7 +127,7 @@ export class FormPage implements OnInit {
       type: ETermType.Name,
       term: "",
       translation: "",
-      gender: EGender.None,
+      gender: EGender.none,
       followedBy: EPrepositionType.Accusative,
       conjugation: {
         presentParticiple: "",
@@ -132,7 +141,7 @@ export class FormPage implements OnInit {
   /**
    * Set validators according to the selected term type
    */
-  private setValidators() {
+  private _setValidators() {
     this.followedBy.disable();
     this.conjugation.disable();
     this.verbType.disable();
@@ -141,7 +150,7 @@ export class FormPage implements OnInit {
     this.newTermForm.get("type").valueChanges.subscribe((type: string) => {
       if (type === ETermType.Name) {
         this.gender.enable();
-        this.gender.setValue(EGender.None);
+        this.gender.setValue(EGender.none);
         this.gender.setValidators(Validators.required);
       } else {
         this.gender.clearValidators();
@@ -169,5 +178,20 @@ export class FormPage implements OnInit {
         this.verbType.clearValidators();
       }
     });
+  }
+
+  /**
+   * Format response before submitting
+   * depending on the type
+   */
+  private _formatForm(form: ITerm): ITerm | IName | IVerb | IPreposition {
+    if (form.type === ETermType.Name) {
+      const nameForm = form as IName;
+      nameForm.gender = this.gendersList[`${nameForm.gender}`];
+
+      return nameForm;
+    }
+
+    return form;
   }
 }

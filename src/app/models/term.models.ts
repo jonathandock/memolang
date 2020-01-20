@@ -1,6 +1,7 @@
 import { IGender } from "./gender.models";
 
 export interface ITerm {
+  id: string;
   value: string;
   translation: string;
   type: ETermType;

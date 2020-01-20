@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Form</ion-title>
     <ion-buttons slot="primary">
-      <ion-button type="submit" [disabled]="!newTermForm.valid" (click)="form.onSubmit()">Save</ion-button>
+      <ion-button type="submit" [disabled]="!newTermForm.valid" (click)="onSubmit()">Save</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -77,10 +77,12 @@
             none
           </ion-button>
         </ion-item-divider>
-        <ion-item *ngFor="let gender of gendersList">
-          <ion-label>{{gender.value}}</ion-label>
-          <ion-radio [value]="gender.value"></ion-radio>
-        </ion-item>
+        <ng-container *ngFor="let gender of gendersList | keyvalue">
+          <ion-item *ngIf="gender.key !== 'none'">
+            <ion-label>{{gender.value.value}}</ion-label>
+            <ion-radio [value]="gender.value.value" [checked]="gender.value.value === newTermForm.controls.gender.value"></ion-radio>
+          </ion-item>
+        </ng-container>
       </ion-radio-group>
 
       <!-- FOLLOWEDBY - only if type is preposition - required -->
@@ -164,6 +166,8 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
+
+    <!-- <ion-button expand="full" class="ion-no-margin submit-button" type="submit" [disabled]="!newTermForm.valid">Save</ion-button> -->
   </form>
 </ion-content>
 

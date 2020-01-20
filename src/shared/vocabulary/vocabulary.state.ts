@@ -1,5 +1,7 @@
 import { State, Action, StateContext, Selector } from "@ngxs/store";
 import { AddTerm } from "./vocabulary.actions";
+import * as _ from "lodash";
+import { HelpersService } from 'src/app/services/helpers.service';
 
 export class VocabularyStateModel {
   terms: any[];
@@ -32,11 +34,14 @@ export class VocabularyState {
   constructor() {}
 
   @Action(AddTerm)
-  add(ctx: StateContext<VocabularyStateModel>, action: AddTerm) {
+  add(ctx: StateContext<VocabularyStateModel>, { payload }: AddTerm) {
     const state = ctx.getState();
 
+    payload.id = HelpersService.guid();
+    payload.createdDate = _.now();
+
     ctx.patchState({
-      terms: [...state.terms, action.payload]
+      terms: [...state.terms, payload]
     });
   }
 }

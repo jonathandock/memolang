@@ -28,7 +28,7 @@
     "@ionic/angular": "^4.7.1",
     "@ngxs/form-plugin": "^3.6.0",
     "@ngxs/logger-plugin": "^3.5.1",
-    "@ngxs/storage-plugin": "^3.6.0",
+    "@ngxs/storage-plugin": "^3.6.1",
     "@ngxs/store": "^3.5.1",
     "core-js": "^2.5.4",
     "lodash": "^4.17.15",

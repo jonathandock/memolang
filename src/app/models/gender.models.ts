@@ -4,15 +4,15 @@ export interface IGender {
 }
 
 export enum EGender {
-  Der = "der",
-  Die = "die",
-  Das = "das",
-  None = "none"
+  der = "der",
+  die = "die",
+  das = "das",
+  none = "none"
 }
 
 export enum EGenderType {
-  Masculine = "masculine",
-  Feminine = "feminine",
-  Neutral = "neutral",
-  None = "none"
+  der = "masculine",
+  die = "feminine",
+  das = "neutral",
+  none = "none"
 }
