@@ -1,56 +1,129 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Vocabulary</ion-title>
+    <ion-buttons slot="primary">
+      <memolang-new-term-button></memolang-new-term-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="sortList()">Sort</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
   <ng-container *ngIf="terms$ | async as terms; else noTerms">
-    <ion-list class="vocab-list">
-      <ion-item *ngFor="let term of terms$ | async" [ngSwitch]="term.type" class="vocab-item">
+    <ion-list class="vocab-list" lines="full">
 
-        <ng-container *ngSwitchCase="'name'">
-          <ion-label class="ion-text-wrap">
-            <div class="vocab-item__translation">{{ term.translation }} {{ term.gender ? '(' + term.gender.value + ')' : '' }}</div>
-            <div class="vocab-item__term">{{ term.term }}</div>
-          </ion-label>
-          <ion-badge color="primary">{{term.type}}</ion-badge>
+      <ion-item-divider sticky color="light">
+        <ion-label>{{activeSort$ | async}}</ion-label>
+      </ion-item-divider>
+
+      <!-- SORTED BY LATEST -->
+      <ng-container *ngIf="(activeSort$ | async) === sortTypes.Latest">
+        <ion-item *ngFor="let term of terms$ | async" [ngSwitch]="term.type" class="vocab-item">
+
+          <ng-container *ngSwitchCase="'name'">
+            <ion-label class="ion-text-wrap">
+              <div class="vocab-item__translation">{{ term.translation }} {{ term.gender ? '(' + term.gender.value + ')' : '' }}</div>
+              <div class="vocab-item__term">{{ term.term }}</div>
+            </ion-label>
+            <ion-badge color="primary">{{term.type}}</ion-badge>
+          </ng-container>
+  
+          <ng-container *ngSwitchCase="'verb'">
+            <ion-label class="ion-text-wrap">
+              <div class="vocab-item__translation">{{ term.translation }}</div>
+              <div class="vocab-item__term">{{ term.term }}</div>
+            </ion-label>
+            <ion-badge color="secondary">{{term.type}}</ion-badge>
+          </ng-container>
+  
+          <ng-container *ngSwitchCase="'preposition'">
+            <ion-label class="ion-text-wrap">
+              <div class="vocab-item__translation">{{ term.translation }}</div>
+              <div class="vocab-item__term">{{ term.term }}</div>
+            </ion-label>
+            <ion-badge color="tertiary">{{term.type}}</ion-badge>
+          </ng-container>
+  
+          <ng-container *ngSwitchCase="'adverb'">
+            <ion-label class="ion-text-wrap">
+              <div class="vocab-item__translation">{{ term.translation }}</div>
+              <div class="vocab-item__term">{{ term.term }}</div>
+            </ion-label>
+            <ion-badge color="warning">{{term.type}}</ion-badge>
+          </ng-container>
+  
+          <ng-container *ngSwitchCase="'expression'">
+            <ion-label class="ion-text-wrap">
+              <div class="vocab-item__translation">{{ term.translation }}</div>
+              <div class="vocab-item__term">{{ term.term }}</div>
+            </ion-label>
+            <ion-badge color="medium">{{term.type}}</ion-badge>
+          </ng-container>
+  
+        </ion-item>
+      </ng-container>
+
+      <!-- SORTED BY ALPHABETICAL ORDER -->
+      <ng-container *ngIf="(activeSort$ | async) === sortTypes.Alphabetically">
+
+        <ng-container *ngFor="let group of sortedTerms$ | async">
+          <ion-list-header color="light">
+            <ion-label>{{group.key}}</ion-label>
+          </ion-list-header>
+
+          <ion-item *ngFor="let term of group.terms" [ngSwitch]="term.type" class="vocab-item">
+
+            <ng-container *ngSwitchCase="'name'">
+              <ion-label class="ion-text-wrap">
+                <div class="vocab-item__translation">{{ term.translation }} {{ term.gender ? '(' + term.gender.value + ')' : '' }}</div>
+                <div class="vocab-item__term">{{ term.term }}</div>
+              </ion-label>
+              <ion-badge color="primary">{{term.type}}</ion-badge>
+            </ng-container>
+    
+            <ng-container *ngSwitchCase="'verb'">
+              <ion-label class="ion-text-wrap">
+                <div class="vocab-item__translation">{{ term.translation }}</div>
+                <div class="vocab-item__term">{{ term.term }}</div>
+              </ion-label>
+              <ion-badge color="secondary">{{term.type}}</ion-badge>
+            </ng-container>
+    
+            <ng-container *ngSwitchCase="'preposition'">
+              <ion-label class="ion-text-wrap">
+                <div class="vocab-item__translation">{{ term.translation }}</div>
+                <div class="vocab-item__term">{{ term.term }}</div>
+              </ion-label>
+              <ion-badge color="tertiary">{{term.type}}</ion-badge>
+            </ng-container>
+    
+            <ng-container *ngSwitchCase="'adverb'">
+              <ion-label class="ion-text-wrap">
+                <div class="vocab-item__translation">{{ term.translation }}</div>
+                <div class="vocab-item__term">{{ term.term }}</div>
+              </ion-label>
+              <ion-badge color="warning">{{term.type}}</ion-badge>
+            </ng-container>
+    
+            <ng-container *ngSwitchCase="'expression'">
+              <ion-label class="ion-text-wrap">
+                <div class="vocab-item__translation">{{ term.translation }}</div>
+                <div class="vocab-item__term">{{ term.term }}</div>
+              </ion-label>
+              <ion-badge color="medium">{{term.type}}</ion-badge>
+            </ng-container>
+    
+          </ion-item>
         </ng-container>
 
-        <ng-container *ngSwitchCase="'verb'">
-          <ion-label class="ion-text-wrap">
-            <div class="vocab-item__translation">{{ term.translation }}</div>
-            <div class="vocab-item__term">{{ term.term }}</div>
-          </ion-label>
-          <ion-badge color="secondary">{{term.type}}</ion-badge>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'preposition'">
-          <ion-label class="ion-text-wrap">
-            <div class="vocab-item__translation">{{ term.translation }}</div>
-            <div class="vocab-item__term">{{ term.term }}</div>
-          </ion-label>
-          <ion-badge color="tertiary">{{term.type}}</ion-badge>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'adverb'">
-          <ion-label class="ion-text-wrap">
-            <div class="vocab-item__translation">{{ term.translation }}</div>
-            <div class="vocab-item__term">{{ term.term }}</div>
-          </ion-label>
-          <ion-badge color="warning">{{term.type}}</ion-badge>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'expression'">
-          <ion-label class="ion-text-wrap">
-            <div class="vocab-item__translation">{{ term.translation }}</div>
-            <div class="vocab-item__term">{{ term.term }}</div>
-          </ion-label>
-          <ion-badge color="medium">{{term.type}}</ion-badge>
-        </ng-container>
-
-      </ion-item>
+      </ng-container>
+      
     </ion-list>
   </ng-container>
 

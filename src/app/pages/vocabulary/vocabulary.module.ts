@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { VocabularyPageRoutingModule } from './vocabulary-routing.module';
 
 import { VocabularyPage } from './vocabulary.page';
+import { NewTermButtonModule } from 'src/app/components/new-term-button/new-term-button.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VocabularyPageRoutingModule
+    VocabularyPageRoutingModule,
+    NewTermButtonModule
   ],
   declarations: [VocabularyPage]
 })

@@ -1,22 +1,16 @@
 import { State, Action, StateContext, Selector } from "@ngxs/store";
-import { AddTerm } from "./vocabulary.actions";
+import { AddTerm, SetSortOrder } from "./vocabulary.actions";
 import * as _ from "lodash";
-import { HelpersService } from 'src/app/services/helpers.service';
-
-export class VocabularyStateModel {
-  terms: any[];
-  newTermForm: {
-    model: string;
-    dirty: boolean;
-    status: string;
-    errors: any;
-  };
-}
+import { HelpersService } from "src/app/services/helpers.service";
+import { ESorts } from "src/app/models/sort.models";
+import { VocabularyStateModel } from "./vocabulary.models";
 
 @State<VocabularyStateModel>({
   name: "vocabulary",
   defaults: {
+    initialised: false,
     terms: [],
+    activeSort: ESorts.Latest,
     newTermForm: {
       model: undefined,
       dirty: false,
@@ -31,6 +25,16 @@ export class VocabularyState {
     return state.terms;
   }
 
+  @Selector()
+  static sortedTerms(state: VocabularyStateModel): any[] {
+    return state.sortedTerms;
+  }
+
+  @Selector()
+  static activeSort(state: VocabularyStateModel): string {
+    return state.activeSort;
+  }
+
   constructor() {}
 
   @Action(AddTerm)
@@ -40,8 +44,18 @@ export class VocabularyState {
     payload.id = HelpersService.guid();
     payload.createdDate = _.now();
 
+    const updatedTerms = [...state.terms, payload];
+
     ctx.patchState({
-      terms: [...state.terms, payload]
+      terms: updatedTerms,
+      sortedTerms: HelpersService.sortListAlphabetically(updatedTerms)
+    });
+  }
+
+  @Action(SetSortOrder)
+  setSort(ctx: StateContext<VocabularyStateModel>, { sort }: SetSortOrder) {
+    ctx.patchState({
+      activeSort: sort
     });
   }
 }

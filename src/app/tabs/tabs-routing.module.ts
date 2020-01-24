@@ -7,16 +7,16 @@ const routes: Routes = [
     path: "tabs",
     component: TabsPage,
     children: [
-      {
-        path: "form",
-        children: [
-          {
-            path: "",
-            loadChildren: () =>
-              import("../pages/form/form.module").then(m => m.FormPageModule)
-          }
-        ]
-      },
+      // {
+      //   path: "form",
+      //   children: [
+      //     {
+      //       path: "",
+      //       loadChildren: () =>
+      //         import("../pages/form/form.module").then(m => m.FormPageModule)
+      //     }
+      //   ]
+      // },
       {
         path: "dashboard",
         children: [
@@ -67,14 +67,14 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "/tabs/form",
+        redirectTo: "/tabs/dashboard",
         pathMatch: "full"
       }
     ]
   },
   {
     path: "",
-    redirectTo: "/tabs/form",
+    redirectTo: "/tabs/dashboard",
     pathMatch: "full"
   }
 ];
