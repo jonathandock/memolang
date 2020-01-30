@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { VocabularyState } from 'src/shared/vocabulary/vocabulary.state';
 import { Observable } from 'rxjs';
-import { ITerm, IName, IPreposition } from 'src/app/models/term.models';
+import { ITerm, IPreposition } from 'src/app/models/term.models';
 import { IVerb } from 'src/app/models/verb.models';
 import { ESorts } from 'src/app/models/sort.models';
 import { AlertController } from '@ionic/angular';
@@ -20,6 +20,7 @@ export class VocabularyPage implements OnInit {
   @Select(VocabularyState.activeSort) activeSort$: Observable<string>;
 
   public sortTypes = ESorts;
+  public searchInputValue = '';
 
   constructor(
     private store: Store,
@@ -27,6 +28,13 @@ export class VocabularyPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  /**
+   * Filtering terms with the searchbar value
+   */
+  public search(ev: any) {
+    this.searchInputValue = ev.detail.value;
   }
 
   async sortList() {

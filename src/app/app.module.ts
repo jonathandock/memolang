@@ -16,7 +16,6 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from 'src/environments/environment';
 import { VocabularyState } from 'src/shared/vocabulary/vocabulary.state';
-import { NewTermButtonModule } from './components/new-term-button/new-term-button.module';
 
 @NgModule({
   declarations: [AppComponent],

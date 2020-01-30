@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector } from "@ngxs/store";
+import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { AddTerm, SetSortOrder } from "./vocabulary.actions";
 import * as _ from "lodash";
 import { HelpersService } from "src/app/services/helpers.service";

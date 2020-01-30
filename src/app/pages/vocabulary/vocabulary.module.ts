@@ -8,6 +8,8 @@ import { VocabularyPageRoutingModule } from './vocabulary-routing.module';
 
 import { VocabularyPage } from './vocabulary.page';
 import { NewTermButtonModule } from 'src/app/components/new-term-button/new-term-button.module';
+import { ListItemComponent } from 'src/app/components/list-item/list-item.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -15,8 +17,9 @@ import { NewTermButtonModule } from 'src/app/components/new-term-button/new-term
     FormsModule,
     IonicModule,
     VocabularyPageRoutingModule,
-    NewTermButtonModule
+    NewTermButtonModule,
+    PipesModule
   ],
-  declarations: [VocabularyPage]
+  declarations: [VocabularyPage, ListItemComponent]
 })
 export class VocabularyPageModule {}
