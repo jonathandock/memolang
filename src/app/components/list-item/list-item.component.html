@@ -1,43 +1,51 @@
-<ion-item [ngSwitch]="term.type" class="vocab-item">
+<ion-item-sliding>
+  <ion-item [ngSwitch]="term.type" class="vocab-item">
 
-  <ng-container *ngSwitchCase="'name'">
-    <ion-label class="ion-text-wrap">
-      <div class="vocab-item__translation"><span [innerHTML]="term.translation | highlight:search"></span> {{ term.gender ? '(' + term.gender.value + ')' : '' }}</div>
-      <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-    </ion-label>
-    <ion-badge color="primary">{{term.type}}</ion-badge>
-  </ng-container>
+    <ng-container *ngSwitchCase="'name'">
+      <ion-label class="ion-text-wrap">
+        <div class="vocab-item__translation"><span [innerHTML]="term.translation | highlight:search"></span> {{ term.gender ? '(' + term.gender.value + ')' : '' }}</div>
+        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
+      </ion-label>
+      <ion-badge color="primary">{{term.type}}</ion-badge>
+    </ng-container>
 
-  <ng-container *ngSwitchCase="'verb'">
-    <ion-label class="ion-text-wrap">
-      <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-      <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-    </ion-label>
-    <ion-badge color="secondary">{{term.type}}</ion-badge>
-  </ng-container>
+    <ng-container *ngSwitchCase="'verb'">
+      <ion-label class="ion-text-wrap">
+        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
+        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
+      </ion-label>
+      <ion-badge color="secondary">{{term.type}}</ion-badge>
+    </ng-container>
 
-  <ng-container *ngSwitchCase="'preposition'">
-    <ion-label class="ion-text-wrap">
-      <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-      <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-    </ion-label>
-    <ion-badge color="tertiary">{{term.type}}</ion-badge>
-  </ng-container>
+    <ng-container *ngSwitchCase="'preposition'">
+      <ion-label class="ion-text-wrap">
+        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
+        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
+      </ion-label>
+      <ion-badge color="tertiary">{{term.type}}</ion-badge>
+    </ng-container>
 
-  <ng-container *ngSwitchCase="'adverb'">
-    <ion-label class="ion-text-wrap">
-      <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-      <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-    </ion-label>
-    <ion-badge color="warning">{{term.type}}</ion-badge>
-  </ng-container>
+    <ng-container *ngSwitchCase="'adverb'">
+      <ion-label class="ion-text-wrap">
+        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
+        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
+      </ion-label>
+      <ion-badge color="warning">{{term.type}}</ion-badge>
+    </ng-container>
 
-  <ng-container *ngSwitchCase="'expression'">
-    <ion-label class="ion-text-wrap">
-      <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-      <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-    </ion-label>
-    <ion-badge color="medium">{{term.type}}</ion-badge>
-  </ng-container>
+    <ng-container *ngSwitchCase="'expression'">
+      <ion-label class="ion-text-wrap">
+        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
+        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
+      </ion-label>
+      <ion-badge color="medium">{{term.type}}</ion-badge>
+    </ng-container>
 
-</ion-item>
+  </ion-item>
+
+  <ion-item-options side="end">
+    <ion-item-option color="danger" (click)="delete(term.id); $event.stopPropagation()">
+      <ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

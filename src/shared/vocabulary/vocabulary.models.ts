@@ -4,6 +4,7 @@ import { IVerb } from "src/app/models/verb.models";
 export class VocabularyStateModel {
   initialised: boolean;
   terms: (ITerm | IVerb | IPreposition)[];
+  currentTerm?: ITerm | IVerb | IPreposition;
   sortedTerms?: any[];
   activeSort?: string;
   newTermForm: {

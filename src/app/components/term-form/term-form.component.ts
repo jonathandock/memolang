@@ -24,7 +24,7 @@ export class TermFormComponent implements OnInit {
 
   public newTermForm: FormGroup = this.formBuilder.group({
     type: [ETermType.Name, Validators.required],
-    term: ["", Validators.required],
+    value: ["", Validators.required],
     translation: ["", Validators.required],
     gender: [EGender.none],
     followedBy: [EPrepositionType.Accusative],
@@ -49,8 +49,8 @@ export class TermFormComponent implements OnInit {
   get type() {
     return this.newTermForm.get("type");
   }
-  get term() {
-    return this.newTermForm.get("term");
+  get value() {
+    return this.newTermForm.get("value");
   }
   get translation() {
     return this.newTermForm.get("translation");
@@ -125,7 +125,7 @@ export class TermFormComponent implements OnInit {
 
     this.newTermForm.reset({
       type: ETermType.Name,
-      term: "",
+      value: "",
       translation: "",
       gender: EGender.none,
       followedBy: EPrepositionType.Accusative,
@@ -192,6 +192,10 @@ export class TermFormComponent implements OnInit {
       nameForm.gender = this.gendersList[`${nameForm.gender}`];
 
       return nameForm;
+    }
+
+    if (form.examples && form.examples.length && form.examples.length === 1) {
+      delete form.examples;
     }
 
     return form;

@@ -46,13 +46,13 @@
           {{newTermForm.controls.type.value | titlecase}}
           <ion-text color="danger">*</ion-text>
           <!-- Validator -->
-          <ng-container *ngIf="term.invalid && (term.dirty || term.touched)">
-            <ion-text class="ion-margin-start" color="danger" *ngIf="term.errors.required">
+          <ng-container *ngIf="value.invalid && (value.dirty || value.touched)">
+            <ion-text class="ion-margin-start" color="danger" *ngIf="value.errors.required">
               <b>{{newTermForm.controls.type.value}}</b> is required
             </ion-text>
           </ng-container>
         </ion-label>
-        <ion-input formControlName="term"></ion-input>
+        <ion-input formControlName="value"></ion-input>
       </ion-item>
 
       <ion-item>

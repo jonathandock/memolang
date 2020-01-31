@@ -1,0 +1,16 @@
+.term {
+  &__translation {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+}
+
+.section {
+  &__title {
+    font-size: .8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--ion-color-light-shade);
+  }
+}

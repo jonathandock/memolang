@@ -4,6 +4,15 @@
 
 export const environment = {
   production: false,
+  firebase: {
+    apiKey: "AIzaSyBbOcTZsrFFmkFByj1xwxvLKqqT02StoWI",
+    authDomain: "memolang-1579511908543.firebaseapp.com",
+    databaseURL: "https://memolang-1579511908543.firebaseio.com",
+    projectId: "memolang-1579511908543",
+    storageBucket: "memolang-1579511908543.appspot.com",
+    messagingSenderId: "494208892803",
+    appId: "1:494208892803:web:4fb14a4f54d4dc6c1380b6"
+  }
 };
 
 /*

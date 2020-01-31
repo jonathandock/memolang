@@ -17,6 +17,11 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from 'src/environments/environment';
 import { VocabularyState } from 'src/shared/vocabulary/vocabulary.state';
 
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule, FirestoreSettingsToken } from "@angular/fire/firestore";
+
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -30,12 +35,16 @@ import { VocabularyState } from 'src/shared/vocabulary/vocabulary.state';
     }),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
-    NgxsFormPluginModule.forRoot()
+    NgxsFormPluginModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    HttpClientModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: FirestoreSettingsToken, useValue: {} }
   ],
   bootstrap: [AppComponent]
 })

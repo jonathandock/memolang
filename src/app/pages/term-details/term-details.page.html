@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="primary">
+      <ion-button>Edit</ion-button>
+    </ion-buttons>
+    <ion-title>{{($term | async)?.translation}}</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="term$ | async as term; else loading">
+
+    <div class="ion-padding term__header section">
+      <div class="term__translation">
+        <span *ngIf="term.type === 'name' && term.gender && term.gender.type !== 'none'">{{term.gender.value}}</span> {{term.translation}} 
+        
+        <ng-container [ngSwitch]="term.type">
+          <ion-badge color="primary" *ngSwitchCase="'name'">{{term.type}}</ion-badge>
+          <ion-badge color="secondary" *ngSwitchCase="'verb'">{{term.type}}</ion-badge>
+          <ion-badge color="tertiary" *ngSwitchCase="'preposition'">{{term.type}}</ion-badge>
+          <ion-badge color="warning" *ngSwitchCase="'adverb'">{{term.type}}</ion-badge>
+          <ion-badge color="medium" *ngSwitchCase="'expression'">{{term.type}}</ion-badge>
+        </ng-container>
+      </div>
+      <div class="term__value">{{term.value}}</div>
+    </div>
+
+    <div class="ion-padding term__examples section" *ngIf="term.examples && term.examples.length > 0">
+      <div class="section__title">Examples</div>
+
+      <ul class="examples-list">
+        <li *ngFor="let example of term.examples">{{ example }}</li>
+      </ul>
+    </div>
+    
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="ion-padding ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </ng-template>
+
+</ion-content>

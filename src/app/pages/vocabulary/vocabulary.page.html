@@ -15,6 +15,10 @@
 
 <ion-content>
 
+  <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher> -->
+
   <ng-container *ngIf="terms$ | async as terms; else noTerms">
     <ion-list class="vocab-list" lines="full">
 
@@ -27,6 +31,7 @@
         <memolang-list-item
           [term]="term"
           [search]="searchInputValue"
+          [routerLink]="['term', term.id]"
           *ngFor="let term of terms$ | async | sortTerms | filterBySearch:searchInputValue">
         </memolang-list-item>
       </ng-container>

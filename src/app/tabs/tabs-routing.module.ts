@@ -38,6 +38,13 @@ const routes: Routes = [
               import("../pages/vocabulary/vocabulary.module").then(
                 m => m.VocabularyPageModule
               )
+          },
+          {
+            path: "term/:id",
+            loadChildren: () =>
+              import("../pages/term-details/term-details.module").then(
+                m => m.TermDetailsPageModule
+              )
           }
         ]
       },
