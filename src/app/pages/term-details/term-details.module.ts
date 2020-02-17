@@ -8,6 +8,7 @@ import { TermDetailsPageRoutingModule } from './term-details-routing.module';
 
 import { TermDetailsPage } from './term-details.page';
 import { TermFormComponent } from 'src/app/components/term-form/term-form.component';
+import { TermFormModule } from 'src/app/components/term-form/term-form.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,9 @@ import { TermFormComponent } from 'src/app/components/term-form/term-form.compon
     FormsModule,
     IonicModule,
     TermDetailsPageRoutingModule,
+    TermFormModule,
   ],
   declarations: [TermDetailsPage],
+  entryComponents: [TermFormComponent]
 })
 export class TermDetailsPageModule {}

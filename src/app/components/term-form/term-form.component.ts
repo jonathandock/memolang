@@ -232,7 +232,7 @@ export class TermFormComponent implements OnInit {
       delete form.examples;
     }
 
-    if (this.term.id) {
+    if (this.term && this.term.id) {
       form.id = this.term.id;
     }
 

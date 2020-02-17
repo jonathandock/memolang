@@ -1,19 +1,27 @@
-<ion-header>
+<ion-header translucent="true">
   <ion-toolbar>
     <ion-title>Vocabulary</ion-title>
-    <ion-buttons slot="primary">
+    <ion-buttons slot="end" collapse="true">
       <memolang-new-term-button></memolang-new-term-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar>
-    <ion-searchbar debounce="300" (ionChange)="search($event)"></ion-searchbar>
-    <ion-buttons slot="end">
-      <ion-button (click)="sortList()">Sort</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
 </ion-header>
+<ion-content fullscreen="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Vocabulary</ion-title>
+      <ion-buttons slot="primary">
+        <memolang-new-term-button></memolang-new-term-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-searchbar debounce="300" (ionChange)="search($event)"></ion-searchbar>
+      <ion-buttons slot="end">
+        <ion-button (click)="sortList()">Sort</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-content>
 
   <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
