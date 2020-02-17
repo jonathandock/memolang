@@ -1,4 +1,4 @@
-import { IGender } from "./gender.models";
+import { IGender, EGender } from "./gender.models";
 import { IVerb } from "./verb.models";
 
 export interface ITerm {
@@ -18,7 +18,8 @@ export interface ISortedTerms {
 }
 
 export interface IName extends ITerm {
-  gender: IGender;
+  gender: string;
+  plural?: string;
 }
 
 export interface IPreposition extends ITerm {

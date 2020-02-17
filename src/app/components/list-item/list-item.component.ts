@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { ITerm, IPreposition } from "src/app/models/term.models";
+import { ITerm, IPreposition, IName } from "src/app/models/term.models";
 import { IVerb } from "src/app/models/verb.models";
 import { Store } from '@ngxs/store';
 import { AlertController } from '@ionic/angular';
@@ -11,8 +11,9 @@ import { DeleteTerm } from 'src/shared/vocabulary/vocabulary.actions';
   styleUrls: ["./list-item.component.scss"]
 })
 export class ListItemComponent implements OnInit {
-  @Input() term: ITerm | IVerb | IPreposition;
+  @Input() term: ITerm | IVerb | IPreposition | IName;
   @Input() search: string;
+  @Input() showDate: boolean;
 
   constructor(
     private store: Store,

@@ -27,7 +27,6 @@ export class VocabularyPage implements OnInit {
   constructor(private store: Store, private alertCtrl: AlertController) {}
 
   ngOnInit() {
-    // this.store.dispatch(new GetTerms());
   }
 
   /**

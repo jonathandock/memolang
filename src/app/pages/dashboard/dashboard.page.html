@@ -7,5 +7,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
+
+  <div class="ion-padding-horizontal">
+    <h3>Recently added</h3>
+  </div>
+
+  <ion-list lines="full">
+    <memolang-list-item
+      [term]="term"
+      [showDate]="true"
+      *ngFor="let term of latestTerms$ | async">
+    </memolang-list-item>
+  </ion-list>
 </ion-content>

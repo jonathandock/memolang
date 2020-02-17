@@ -38,7 +38,7 @@ import { HttpClientModule } from '@angular/common/http';
     NgxsFormPluginModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     StatusBar,

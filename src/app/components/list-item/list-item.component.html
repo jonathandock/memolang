@@ -1,44 +1,18 @@
 <ion-item-sliding>
-  <ion-item [ngSwitch]="term.type" class="vocab-item">
+  <ion-item class="vocab-item">
 
-    <ng-container *ngSwitchCase="'name'">
-      <ion-label class="ion-text-wrap">
-        <div class="vocab-item__translation"><span [innerHTML]="term.translation | highlight:search"></span> {{ term.gender ? '(' + term.gender.value + ')' : '' }}</div>
-        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-      </ion-label>
-      <ion-badge color="primary">{{term.type}}</ion-badge>
-    </ng-container>
+    <ion-label class="ion-text-wrap">
+      <div class="vocab-item__translation"><span [innerHTML]="term.translation | highlight:search"></span> {{ term.gender ? '(' + term.gender + ')' : '' }}</div>
+      <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
+    </ion-label>
 
-    <ng-container *ngSwitchCase="'verb'">
-      <ion-label class="ion-text-wrap">
-        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-      </ion-label>
-      <ion-badge color="secondary">{{term.type}}</ion-badge>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'preposition'">
-      <ion-label class="ion-text-wrap">
-        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-      </ion-label>
-      <ion-badge color="tertiary">{{term.type}}</ion-badge>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'adverb'">
-      <ion-label class="ion-text-wrap">
-        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-      </ion-label>
-      <ion-badge color="warning">{{term.type}}</ion-badge>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'expression'">
-      <ion-label class="ion-text-wrap">
-        <div class="vocab-item__translation" [innerHTML]="term.translation | highlight:search"></div>
-        <div class="vocab-item__term" [innerHTML]="term.value | highlight:search"></div>
-      </ion-label>
-      <ion-badge color="medium">{{term.type}}</ion-badge>
+    <span *ngIf="showDate" class="vocab-item__date">{{ term.createdDate | date:'dd/MM/yy' }}</span>
+    <ng-container [ngSwitch]="term.type">
+      <ion-badge color="primary" *ngSwitchCase="'name'">{{term.type}}</ion-badge>
+      <ion-badge color="secondary" *ngSwitchCase="'verb'">{{term.type}}</ion-badge>
+      <ion-badge color="tertiary" *ngSwitchCase="'preposition'">{{term.type}}</ion-badge>
+      <ion-badge color="warning" *ngSwitchCase="'adverb'">{{term.type}}</ion-badge>
+      <ion-badge color="medium" *ngSwitchCase="'expression'">{{term.type}}</ion-badge>
     </ng-container>
 
   </ion-item>

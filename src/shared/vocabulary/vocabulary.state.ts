@@ -2,9 +2,9 @@ import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import {
   AddTerm,
   SetSortOrder,
-  GetTerms,
   GetTerm,
-  DeleteTerm
+  DeleteTerm,
+  UpdateTerm
 } from "./vocabulary.actions";
 import * as _ from "lodash";
 import { HelpersService } from "src/app/services/helpers.service";
@@ -12,7 +12,7 @@ import { ESorts } from "src/app/models/sort.models";
 import { VocabularyStateModel } from "./vocabulary.models";
 import { TermsService } from "src/app/services/terms.service";
 import { tap } from "rxjs/operators";
-import { ITerm, IPreposition } from "src/app/models/term.models";
+import { ITerm, IPreposition, IName } from "src/app/models/term.models";
 import { IVerb } from "src/app/models/verb.models";
 
 @State<VocabularyStateModel>({
@@ -32,7 +32,7 @@ import { IVerb } from "src/app/models/verb.models";
 })
 export class VocabularyState implements NgxsOnInit {
   @Selector()
-  static terms(state: VocabularyStateModel): (ITerm | IVerb | IPreposition)[] {
+  static terms(state: VocabularyStateModel): (ITerm | IVerb | IPreposition | IName)[] {
     return state.terms;
   }
 
@@ -45,12 +45,18 @@ export class VocabularyState implements NgxsOnInit {
 
   @Selector()
   static sortedTerms(state: VocabularyStateModel): any[] {
-    return HelpersService.sortListAlphabetically(state.terms);
+    return state.sortedTerms;
   }
 
   @Selector()
   static activeSort(state: VocabularyStateModel): string {
     return state.activeSort;
+  }
+
+  @Selector()
+  static latestTerms(state: VocabularyStateModel): (ITerm | IVerb | IPreposition | IName)[] {
+    const sorted = _.sortBy(state.terms, ['createdDate']);
+    return sorted.reverse().slice(0, 5);
   }
 
   constructor(private termsService: TermsService) {}
@@ -59,7 +65,8 @@ export class VocabularyState implements NgxsOnInit {
     this.termsService.termsStream().subscribe(terms => {
       if (terms) {
         ctx.patchState({
-          terms
+          terms,
+          sortedTerms: HelpersService.sortListAlphabetically(terms)
         });
       }
     });
@@ -80,6 +87,12 @@ export class VocabularyState implements NgxsOnInit {
   add(ctx: StateContext<VocabularyStateModel>, { payload }: AddTerm) {
     payload.createdDate = _.now();
     return this.termsService.add(payload);
+  }
+
+  @Action(UpdateTerm)
+  update(ctx: StateContext<VocabularyStateModel>, { payload }: UpdateTerm) {
+    payload.lastModified = _.now();
+    return this.termsService.update(payload);
   }
 
   @Action(DeleteTerm)

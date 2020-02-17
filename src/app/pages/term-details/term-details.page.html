@@ -1,11 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="primary">
-      <ion-button>Edit</ion-button>
-    </ion-buttons>
-    <ion-title>{{($term | async)?.translation}}</ion-title>
-    <ion-buttons slot="secondary">
+    <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{(term$ | async)?.translation}}</ion-title>
+    <ion-buttons slot="end">
+      <ng-container *ngIf="term$ | async as term">
+        <ion-button (click)="editTerm(term)">Edit</ion-button>
+      </ng-container>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -15,9 +17,7 @@
   <ng-container *ngIf="term$ | async as term; else loading">
 
     <div class="ion-padding term__header section">
-      <div class="term__translation">
-        <span *ngIf="term.type === 'name' && term.gender && term.gender.type !== 'none'">{{term.gender.value}}</span> {{term.translation}} 
-        
+      <div>
         <ng-container [ngSwitch]="term.type">
           <ion-badge color="primary" *ngSwitchCase="'name'">{{term.type}}</ion-badge>
           <ion-badge color="secondary" *ngSwitchCase="'verb'">{{term.type}}</ion-badge>
@@ -26,8 +26,38 @@
           <ion-badge color="medium" *ngSwitchCase="'expression'">{{term.type}}</ion-badge>
         </ng-container>
       </div>
-      <div class="term__value">{{term.value}}</div>
+      
+      <div class="term__translation">
+        <span *ngIf="term.type === 'name' && term.gender && term.gender !== genderEnum.None">{{term.gender}}</span> {{term.translation}}
+      </div>
+      <div class="term__plural" *ngIf="term.type === 'name' && term.plural">Plural: Die {{term.plural}}</div>
+      <div class="term__value">Translation: {{term.value}}</div>
     </div>
+
+    <ng-container *ngIf="term.type === 'verb'">
+      <div class="ion-padding-horizontal section">
+        <p><b>{{term.translation}}</b> is {{ term.verbType === 'regular' ? 'a regular' : 'an irregular' }} verb.</p>
+      </div>
+
+      <div class="ion-padding-vertical term__conjugation section">
+        <div class="ion-padding-horizontal">
+          <div class="section__title">Conjugation</div>
+        </div>
+        <ion-list lines="full">
+
+          <ion-item *ngIf="term.conjugation.auxiliary">
+            <ion-label class="ion-text-wrap"><ion-text color="medium">Auxiliary</ion-text><br>{{term.conjugation.auxiliary}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="term.conjugation.presentParticiple">
+            <ion-label class="ion-text-wrap"><ion-text color="medium">Present participle</ion-text><br>{{term.conjugation.presentParticiple}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="term.conjugation.pastParticiple">
+            <ion-label class="ion-text-wrap"><ion-text color="medium">Past participle</ion-text><br>{{term.conjugation.pastParticiple}}</ion-label>
+          </ion-item>
+          
+        </ion-list>
+      </div>
+    </ng-container>
 
     <div class="ion-padding term__examples section" *ngIf="term.examples && term.examples.length > 0">
       <div class="section__title">Examples</div>

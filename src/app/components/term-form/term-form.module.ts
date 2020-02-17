@@ -1,12 +1,17 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { TermFormComponent } from "./term-form.component";
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-import { IonicModule } from "@ionic/angular";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TermFormComponent } from './term-form.component';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
+  imports: [
+    CommonModule,
+    IonicModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
   declarations: [TermFormComponent],
-  exports: [TermFormComponent],
-  imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule]
+  exports: [TermFormComponent]
 })
-export class TermFormModule {}
+export class TermFormModule { }

@@ -1,19 +1,26 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { GLOBALS } from 'src/environments/globals';
-import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { ETermType, EPrepositionType, ITerm, IName, IPreposition } from 'src/app/models/term.models';
-import { EGender } from 'src/app/models/gender.models';
-import { EAuxiliary, EVerbType, IVerb } from 'src/app/models/verb.models';
-import { Store } from '@ngxs/store';
-import { AddTerm } from 'src/shared/vocabulary/vocabulary.actions';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild, Input } from "@angular/core";
+import { GLOBALS } from "src/environments/globals";
+import { FormGroup, Validators, FormBuilder, FormArray } from "@angular/forms";
+import {
+  ETermType,
+  EPrepositionType,
+  ITerm,
+  IName,
+  IPreposition
+} from "src/app/models/term.models";
+import { EGender } from "src/app/models/gender.models";
+import { EAuxiliary, EVerbType, IVerb } from "src/app/models/verb.models";
+import { Store } from "@ngxs/store";
+import { AddTerm, UpdateTerm } from "src/shared/vocabulary/vocabulary.actions";
+import { ModalController } from "@ionic/angular";
 
 @Component({
-  selector: 'memolang-term-form',
-  templateUrl: './term-form.component.html',
-  styleUrls: ['./term-form.component.scss'],
+  selector: "memolang-term-form",
+  templateUrl: "./term-form.component.html",
+  styleUrls: ["./term-form.component.scss"]
 })
 export class TermFormComponent implements OnInit {
+  @Input() term: ITerm | IPreposition | IVerb | IName;
   @ViewChild("form", { static: false }) form: HTMLFormElement;
 
   public prepTypesList = GLOBALS.PREPOSITION_TYPES_LIST;
@@ -26,6 +33,7 @@ export class TermFormComponent implements OnInit {
     type: [ETermType.Name, Validators.required],
     value: ["", Validators.required],
     translation: ["", Validators.required],
+    plural: [""],
     gender: [EGender.none],
     followedBy: [EPrepositionType.Accusative],
     conjugation: this.formBuilder.group({
@@ -37,10 +45,23 @@ export class TermFormComponent implements OnInit {
     examples: this.formBuilder.array([this.formBuilder.control("")])
   });
 
-  constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private store: Store) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private formBuilder: FormBuilder,
+    private store: Store
+  ) {}
 
   ngOnInit() {
     this._setValidators();
+
+    if (this.term) {
+      this.newTermForm.patchValue(this.term);
+
+      if (this.term.type === ETermType.Name) {
+        const name = this.term as IName;
+        this.gender.setValue(name.gender);
+      }
+    }
   }
 
   /**
@@ -54,6 +75,9 @@ export class TermFormComponent implements OnInit {
   }
   get translation() {
     return this.newTermForm.get("translation");
+  }
+  get plural() {
+    return this.newTermForm.get("plural");
   }
   get gender() {
     return this.newTermForm.get("gender");
@@ -100,13 +124,23 @@ export class TermFormComponent implements OnInit {
    * Submit form
    */
   public onSubmit() {
-    console.log(this.newTermForm.valid, this.newTermForm);
-    if (this.newTermForm.valid) {
-      this.store.dispatch(new AddTerm(this._formatForm(this.newTermForm.value))).subscribe(() => {
-        this.cancel();
-      });
+    if (!this.newTermForm.valid) {
+      alert("Form not valid");
+      return;
+    }
+
+    if (this.term && this.term.id) {
+      this.store
+        .dispatch(new UpdateTerm(this._formatForm(this.newTermForm.value)))
+        .subscribe(() => {
+          this.cancel();
+        });
     } else {
-      alert('Form not valid');
+      this.store
+        .dispatch(new AddTerm(this._formatForm(this.newTermForm.value)))
+        .subscribe(() => {
+          this.cancel();
+        });
     }
   }
 
@@ -114,7 +148,6 @@ export class TermFormComponent implements OnInit {
    * Cancel form
    */
   public cancel() {
-
     // Hacky reset
     while (this.examples.length) {
       this.examples.removeAt(0);
@@ -127,6 +160,7 @@ export class TermFormComponent implements OnInit {
       type: ETermType.Name,
       value: "",
       translation: "",
+      plural: "",
       gender: EGender.none,
       followedBy: EPrepositionType.Accusative,
       conjugation: {
@@ -154,9 +188,11 @@ export class TermFormComponent implements OnInit {
         this.gender.enable();
         this.gender.setValue(EGender.none);
         this.gender.setValidators(Validators.required);
+        this.plural.enable();
       } else {
         this.gender.clearValidators();
         this.gender.disable();
+        this.plural.disable();
       }
 
       if (type === ETermType.Preposition) {
@@ -186,16 +222,18 @@ export class TermFormComponent implements OnInit {
    * Format response before submitting
    * depending on the type
    */
-  private _formatForm(form: ITerm): ITerm | IName | IVerb | IPreposition {
-    if (form.type === ETermType.Name) {
-      const nameForm = form as IName;
-      nameForm.gender = this.gendersList[`${nameForm.gender}`];
-
-      return nameForm;
+  private _formatForm(form: ITerm): ITerm {
+    if (
+      form.examples &&
+      form.examples.length &&
+      form.examples.length === 1 &&
+      form.examples[0].trim() === ""
+    ) {
+      delete form.examples;
     }
 
-    if (form.examples && form.examples.length && form.examples.length === 1) {
-      delete form.examples;
+    if (this.term.id) {
+      form.id = this.term.id;
     }
 
     return form;

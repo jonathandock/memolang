@@ -1,4 +1,4 @@
-import { ITerm, IPreposition } from 'src/app/models/term.models';
+import { ITerm, IPreposition, IName } from 'src/app/models/term.models';
 import { IVerb } from 'src/app/models/verb.models';
 import { ESorts } from 'src/app/models/sort.models';
 
@@ -13,7 +13,12 @@ export class GetTerm {
 }
 export class AddTerm {
   static readonly type = "[Vocabulary] Add term";
-  constructor(public payload: ITerm | IVerb | IPreposition) {}
+  constructor(public payload: ITerm | IVerb | IPreposition | IName) {}
+}
+
+export class UpdateTerm {
+  static readonly type = "[Vocabulary] Update term";
+  constructor(public payload: ITerm | IVerb | IPreposition | IName) {}
 }
 
 export class DeleteTerm {

@@ -70,17 +70,22 @@
       </ion-item>
 
       <!-- GENDER - only if type is name -->
+      <ion-item *ngIf="!newTermForm.controls.plural.disabled">
+        <ion-label position="stacked">
+          Plural
+        </ion-label>
+        <ion-input formControlName="plural"></ion-input>
+      </ion-item>
+
       <ion-radio-group *ngIf="!newTermForm.controls.gender.disabled" formControlName="gender">
         <ion-item-divider color="light">
           <ion-label>Gender</ion-label>
-          <ion-button slot="end" fill="clear" (click)="unsetGender()">
-            none
-          </ion-button>
+          <ion-button slot="end" fill="clear" (click)="unsetGender()">none</ion-button>
         </ion-item-divider>
-        <ng-container *ngFor="let gender of gendersList | keyvalue">
-          <ion-item *ngIf="gender.key !== 'none'">
-            <ion-label>{{gender.value.value}}</ion-label>
-            <ion-radio [value]="gender.value.value" [checked]="gender.value.value === newTermForm.controls.gender.value"></ion-radio>
+        <ng-container *ngFor="let gender of gendersList">
+          <ion-item *ngIf="gender !== 'none'">
+            <ion-label>{{gender}}</ion-label>
+            <ion-radio [value]="gender"></ion-radio>
           </ion-item>
         </ng-container>
       </ion-radio-group>
@@ -141,12 +146,6 @@
 
     <!-- EXAMPLES -->
     <ion-list class="ion-no-padding ion-no-margin ion-margin-bottom" formArrayName="examples">
-      <!-- <ion-item-divider color="light">
-        <ion-label>Notes</ion-label>
-      </ion-item-divider>
-      <ion-item>
-        <ion-textarea placeholder="Your notes on this {{newTermForm.controls.type.value}}"></ion-textarea>
-      </ion-item> -->
 
       <ion-item-divider color="light">
         <ion-label>Examples</ion-label>

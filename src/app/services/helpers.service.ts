@@ -28,6 +28,7 @@ export class HelpersService {
   static sortListAlphabetically(
     terms: (ITerm | IVerb | IPreposition)[]
   ): ISortedTerms[] {
+
     // sort array
     const sorted = terms.sort((a, b) =>
       a.translation > b.translation ? 1 : -1

@@ -10,12 +10,12 @@ export const GLOBALS = {
     ETermType.Expression,
     ETermType.Preposition
   ],
-  GENDERS_LIST: {
-    der: { value: EGender.der, type: EGenderType.der },
-    die: { value: EGender.die, type: EGenderType.die },
-    das: { value: EGender.das, type: EGenderType.das },
-    none: { value: EGender.none, type: EGenderType.none },
-  } ,
+  GENDERS_LIST: [
+    EGender.der,
+    EGender.die,
+    EGender.das,
+    EGender.none,
+  ] ,
   PREPOSITION_TYPES_LIST: [
     EPrepositionType.Accusative,
     EPrepositionType.Dative,
