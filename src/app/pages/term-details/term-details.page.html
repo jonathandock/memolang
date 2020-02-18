@@ -1,17 +1,17 @@
+
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button color="dark"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{(term$ | async)?.translation}}</ion-title>
+    <ion-title>Details</ion-title>
     <ion-buttons slot="end">
       <ng-container *ngIf="term$ | async as term">
-        <ion-button (click)="editTerm(term)">Edit</ion-button>
+        <ion-button (click)="editTerm(term)" color="dark">Edit</ion-button>
       </ng-container>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
 
   <ng-container *ngIf="term$ | async as term; else loading">
