@@ -3,13 +3,13 @@ import {
   AngularFirestore,
   AngularFirestoreCollection
 } from "@angular/fire/firestore";
-import { Observable, from } from "rxjs";
-import { map, take, tap } from "rxjs/operators";
+import { Observable, from, of } from "rxjs";
+import { map, take, tap, catchError } from "rxjs/operators";
 import { IPreposition, ITerm, IName } from "../models/term.models";
 import { IVerb } from "../models/verb.models";
 
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { GoogleTranslateResponse, TranslateTextResponseList, TranslateTextResponseTranslation, TranslationObject } from '../models/translate.model';
 
 @Injectable({
   providedIn: "root"
@@ -21,9 +21,9 @@ export class TermsService {
   >;
 
   constructor(private afs: AngularFirestore, private http: HttpClient) {
-    this._termsCollection = this.afs.collection<ITerm | IVerb | IPreposition | IName>(
-      "terms"
-    );
+    this._termsCollection = this.afs.collection<
+      ITerm | IVerb | IPreposition | IName
+    >("terms");
     this._terms = this._termsCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -93,5 +93,39 @@ export class TermsService {
    */
   public delete(id: string) {
     return from(this._termsCollection.doc(id).delete());
+  }
+
+  /**
+   * Translate a word to german with google translate API
+   * @param translationObj
+   */
+  public translate(translationObj: TranslationObject): Observable<TranslateTextResponseTranslation[]> {
+    const url =
+      "https://google-translate1.p.rapidapi.com/language/translate/v2";
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "x-rapidapi-host": "google-translate1.p.rapidapi.com",
+        "x-rapidapi-key": "5d02500658msh4fd0f4747554216p1addfdjsn436842ca05b7",
+        "content-type": "application/x-www-form-urlencoded"
+      })
+    };
+
+    const httpParams = new HttpParams({ fromObject: translationObj as any });
+    const urlEncodedBody = httpParams.toString().replace(/\+/g, '%2B');
+
+    return this.http.post(url, urlEncodedBody, httpOptions).pipe(
+      map((googleTranslateRes: GoogleTranslateResponse) => {
+        if (googleTranslateRes && googleTranslateRes.data) {
+          return googleTranslateRes.data.translations;
+        } else {
+          return [];
+        }
+      }),
+      catchError((err) => {
+        console.log(err);
+        return of([]);
+      })
+    );
   }
 }

@@ -12,6 +12,10 @@ export const environment = {
     storageBucket: "memolang-1579511908543.appspot.com",
     messagingSenderId: "494208892803",
     appId: "1:494208892803:web:4fb14a4f54d4dc6c1380b6"
+  },
+  google_translate: {
+    url: 'https://google-translate1.p.rapidapi.com/language/translate/v2',
+    key: '5d02500658msh4fd0f4747554216p1addfdjsn436842ca05b7'
   }
 };
 

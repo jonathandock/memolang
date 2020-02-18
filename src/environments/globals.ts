@@ -3,6 +3,11 @@ import { EGender, EGenderType } from 'src/app/models/gender.models';
 import { EVerbType, EAuxiliary } from 'src/app/models/verb.models';
 
 export const GLOBALS = {
+  LANGUAGES_LIST: [
+    { name: 'french', code: 'fr' },
+    { name: 'german', code: 'de' },
+    { name: 'english', code: 'en' }
+  ],
   TERM_TYPES_LIST: [
     ETermType.Name,
     ETermType.Verb,

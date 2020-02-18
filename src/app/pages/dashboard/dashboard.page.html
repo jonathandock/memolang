@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen="true">
+<ion-content fullscreen="true" class="dashboard">
 
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -18,15 +18,26 @@
     </ion-toolbar>
   </ion-header>
 
-  <div class="ion-padding-horizontal">
-    <h3>Recently added</h3>
+  <div class="dashboard__quick-translate">
+    <div class="ion-padding-horizontal ion-margin-bottom">
+      <h3>Quick translate</h3>
+    </div>
+
+    <memolang-quick-translate></memolang-quick-translate>
   </div>
 
-  <ion-list lines="full">
-    <memolang-list-item
-      [term]="term"
-      [showDate]="true"
-      *ngFor="let term of latestTerms$ | async">
-    </memolang-list-item>
-  </ion-list>
+  <div class="dashboard__recently-added ion-padding-top">
+    <div class="ion-padding-horizontal">
+      <h3>Recently added</h3>
+    </div>
+
+    <ion-list lines="full">
+      <memolang-list-item
+        [term]="term"
+        [showDate]="true"
+        *ngFor="let term of latestTerms$ | async">
+      </memolang-list-item>
+    </ion-list>
+
+  </div>
 </ion-content>

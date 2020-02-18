@@ -13,6 +13,7 @@ import { EAuxiliary, EVerbType, IVerb } from "src/app/models/verb.models";
 import { Store } from "@ngxs/store";
 import { AddTerm, UpdateTerm } from "src/shared/vocabulary/vocabulary.actions";
 import { ModalController } from "@ionic/angular";
+import { QuickTranslation } from "src/app/models/translate.model";
 
 @Component({
   selector: "memolang-term-form",
@@ -21,6 +22,7 @@ import { ModalController } from "@ionic/angular";
 })
 export class TermFormComponent implements OnInit {
   @Input() term: ITerm | IPreposition | IVerb | IName;
+  @Input() quickTranslation: QuickTranslation;
   @ViewChild("form", { static: false }) form: HTMLFormElement;
 
   public prepTypesList = GLOBALS.PREPOSITION_TYPES_LIST;
@@ -61,6 +63,11 @@ export class TermFormComponent implements OnInit {
         const name = this.term as IName;
         this.gender.setValue(name.gender);
       }
+    }
+
+    if (this.quickTranslation) {
+      this.translation.setValue(this.quickTranslation.translatedTerm);
+      this.value.setValue(this.quickTranslation.searchedText);
     }
   }
 
