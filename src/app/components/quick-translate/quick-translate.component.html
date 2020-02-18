@@ -1,0 +1,46 @@
+<form [formGroup]="translateForm" (ngSubmit)="onSubmitTranslation(translateForm.value)">
+  <ion-list lines="full">
+
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="5" class="ion-text-start ion-no-padding">
+          <ion-label class="ion-padding-start">Source language</ion-label>
+          <ion-select placeholder="Source" formControlName="source">
+            <ion-select-option [value]="lang.code" *ngFor="let lang of langList">{{lang.name}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="2" class="ion-text-center ion-no-padding">
+          <ion-button fill="clear" disabled>
+            <ion-icon name="swap-horizontal"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="5" class="ion-text-start ion-no-padding">
+          <ion-label class="ion-padding-start">Target language</ion-label>
+          <ion-select placeholder="Target" formControlName="target">
+            <ion-select-option [value]="lang.code" *ngFor="let lang of langList">{{lang.name}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-item>
+      <ion-input type="text" formControlName="q" placeholder="Type your text here" clearInput (ionChange)="onInputChange($event.detail.value)"></ion-input>
+      <ion-button slot="end" type="submit" [disabled]="!translateForm.valid">
+        Translate
+        <ion-icon name="repeat" slot="end"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-item *ngIf="translatedTexts || loadingTranslation" color="light">
+      <ng-container *ngIf="translatedTexts">
+        <ion-label>
+          <ion-text *ngFor="let text of translatedTexts">{{text.translatedText}}</ion-text>
+        </ion-label>
+        <ion-button slot="end" (click)="addTranslation(translatedTexts, translateForm.controls.q.value)">
+          Save
+          <ion-icon name="save-outline" slot="end"></ion-icon>
+        </ion-button>
+      </ng-container>
+      <ion-spinner name="crescent" *ngIf="loadingTranslation"></ion-spinner>
+    </ion-item>
+  </ion-list>
+</form>
