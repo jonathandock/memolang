@@ -47,7 +47,7 @@ export class QuickTranslateComponent implements OnInit {
    */
   public onInputChange(inputValue: string) {
     if (!inputValue && this.translatedTexts) {
-      this.translatedTexts = [];
+      this.translatedTexts = null;
     }
   }
 

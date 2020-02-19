@@ -1,28 +1,21 @@
-<ion-header translucent="true">
+
+
+<ion-header>
   <ion-toolbar>
     <ion-title>Vocabulary</ion-title>
-    <ion-buttons slot="end" collapse="true">
+    <ion-buttons slot="end">
       <memolang-new-term-button></memolang-new-term-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar debounce="300" (ionChange)="search($event)"></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="sortList()" color="dark">Sort</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
-<ion-content fullscreen="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Vocabulary</ion-title>
-      <ion-buttons slot="primary">
-        <memolang-new-term-button></memolang-new-term-button>
-      </ion-buttons>
-    </ion-toolbar>
-    <ion-toolbar>
-      <ion-searchbar debounce="300" (ionChange)="search($event)"></ion-searchbar>
-      <ion-buttons slot="end">
-        <ion-button (click)="sortList()" color="dark">Sort</ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
 
-
+<ion-content>
   <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher> -->
@@ -39,7 +32,7 @@
         <memolang-list-item
           [term]="term"
           [search]="searchInputValue"
-          [routerLink]="['term', term.id]"
+          (click)="goToTermDetails(term.id)"
           *ngFor="let term of terms$ | async | sortTerms | filterBySearch:searchInputValue">
         </memolang-list-item>
       </ng-container>
@@ -55,6 +48,7 @@
           <memolang-list-item
             [term]="term"
             [search]="searchInputValue"
+            (click)="goToTermDetails(term.id)"
             *ngFor="let term of group.terms | filterBySearch:searchInputValue">
           </memolang-list-item>
         </ng-container>

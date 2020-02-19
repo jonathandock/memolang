@@ -1,13 +1,14 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { VocabularyState } from "src/shared/vocabulary/vocabulary.state";
 import { Observable } from "rxjs";
 import { ITerm, IPreposition } from "src/app/models/term.models";
 import { IVerb } from "src/app/models/verb.models";
 import { ESorts } from "src/app/models/sort.models";
-import { AlertController } from "@ionic/angular";
+import { AlertController, NavController } from "@ionic/angular";
 import { SetSortOrder } from "src/shared/vocabulary/vocabulary.actions";
 import * as _ from "lodash";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-vocabulary",
@@ -24,10 +25,14 @@ export class VocabularyPage implements OnInit {
   public sortTypes = ESorts;
   public searchInputValue = "";
 
-  constructor(private store: Store, private alertCtrl: AlertController) {}
+  constructor(
+    private store: Store,
+    private ngZone: NgZone,
+    private navCtrl: NavController,
+    private alertCtrl: AlertController,
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   /**
    * Filtering terms with the searchbar value
@@ -81,6 +86,12 @@ export class VocabularyPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  public goToTermDetails(termId: string) {
+    this.ngZone.run(() => {
+      this.navCtrl.navigateForward(`/tabs/vocabulary/term/${termId}`);
+    });
   }
 
   // public doRefresh(ev: any) {
