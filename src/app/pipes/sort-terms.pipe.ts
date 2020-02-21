@@ -1,13 +1,12 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { ITerm, IPreposition } from "../models/term.models";
-import { IVerb } from "../models/verb.models";
 import * as _ from "lodash";
+import { ITerm } from '../models/models';
 
 @Pipe({
   name: "sortTerms"
 })
 export class SortTermsPipe implements PipeTransform {
-  transform(terms: (ITerm | IVerb | IPreposition)[], ...args: any[]): any {
+  transform(terms: ITerm[], ...args: any[]): any {
     const sortedTerms = _.cloneDeep(terms);
 
     // For now, terms are sorted from newest to the oldest
@@ -24,8 +23,8 @@ export class SortTermsPipe implements PipeTransform {
    * @param term2
    */
   private _datesSortAsc(
-    term1: ITerm | IVerb | IPreposition,
-    term2: ITerm | IVerb | IPreposition
+    term1: ITerm,
+    term2: ITerm
   ) {
     if (term1.createdDate > term2.createdDate) {
       return 1;
@@ -42,8 +41,8 @@ export class SortTermsPipe implements PipeTransform {
    * @param term2
    */
   private _datesSortDesc(
-    term1: ITerm | IVerb | IPreposition,
-    term2: ITerm | IVerb | IPreposition
+    term1: ITerm,
+    term2: ITerm
   ) {
     if (term1.createdDate > term2.createdDate) {
       return -1;

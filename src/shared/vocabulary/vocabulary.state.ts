@@ -8,12 +8,11 @@ import {
 } from "./vocabulary.actions";
 import * as _ from "lodash";
 import { HelpersService } from "src/app/services/helpers.service";
-import { ESorts } from "src/app/models/sort.models";
 import { VocabularyStateModel } from "./vocabulary.models";
 import { TermsService } from "src/app/services/terms.service";
 import { tap } from "rxjs/operators";
-import { ITerm, IPreposition, IName } from "src/app/models/term.models";
-import { IVerb } from "src/app/models/verb.models";
+import { ITerm } from "src/app/models/models";
+import { ESorts } from "src/app/models/enums";
 
 @State<VocabularyStateModel>({
   name: "vocabulary",
@@ -32,14 +31,12 @@ import { IVerb } from "src/app/models/verb.models";
 })
 export class VocabularyState implements NgxsOnInit {
   @Selector()
-  static terms(state: VocabularyStateModel): (ITerm | IVerb | IPreposition | IName)[] {
+  static terms(state: VocabularyStateModel): ITerm[] {
     return state.terms;
   }
 
   @Selector()
-  static currentTerm(
-    state: VocabularyStateModel
-  ): ITerm | IVerb | IPreposition {
+  static currentTerm(state: VocabularyStateModel): ITerm {
     return state.currentTerm;
   }
 
@@ -54,8 +51,8 @@ export class VocabularyState implements NgxsOnInit {
   }
 
   @Selector()
-  static latestTerms(state: VocabularyStateModel): (ITerm | IVerb | IPreposition | IName)[] {
-    const sorted = _.sortBy(state.terms, ['createdDate']);
+  static latestTerms(state: VocabularyStateModel): ITerm[] {
+    const sorted = _.sortBy(state.terms, ["createdDate"]);
     return sorted.reverse().slice(0, 5);
   }
 

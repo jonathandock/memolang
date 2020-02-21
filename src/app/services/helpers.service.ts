@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ITerm, IPreposition, ISortedTerms } from "../models/term.models";
-import { IVerb } from "../models/verb.models";
-
+import { ITerm, ISortedTerms } from '../models/models';
 @Injectable({
   providedIn: "root"
 })
@@ -26,7 +24,7 @@ export class HelpersService {
    * @param terms
    */
   static sortListAlphabetically(
-    terms: (ITerm | IVerb | IPreposition)[]
+    terms: ITerm[]
   ): ISortedTerms[] {
 
     // sort array

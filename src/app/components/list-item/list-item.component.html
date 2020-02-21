@@ -7,13 +7,7 @@
     </ion-label>
 
     <span *ngIf="showDate" class="vocab-item__date">{{ term.createdDate | date:'dd/MM/yy' }}</span>
-    <ng-container [ngSwitch]="term.type">
-      <ion-badge color="primary" *ngSwitchCase="'name'">{{term.type}}</ion-badge>
-      <ion-badge color="secondary" *ngSwitchCase="'verb'">{{term.type}}</ion-badge>
-      <ion-badge color="tertiary" *ngSwitchCase="'preposition'">{{term.type}}</ion-badge>
-      <ion-badge color="warning" *ngSwitchCase="'adverb'">{{term.type}}</ion-badge>
-      <ion-badge color="medium" *ngSwitchCase="'expression'">{{term.type}}</ion-badge>
-    </ng-container>
+    <ion-badge color="light">{{term.type}}</ion-badge>
 
   </ion-item>
 

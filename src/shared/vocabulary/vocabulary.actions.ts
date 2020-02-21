@@ -1,6 +1,5 @@
-import { ITerm, IPreposition, IName } from 'src/app/models/term.models';
-import { IVerb } from 'src/app/models/verb.models';
-import { ESorts } from 'src/app/models/sort.models';
+import { ITerm } from 'src/app/models/models';
+import { ESorts } from 'src/app/models/enums';
 
 
 export class GetTerms {
@@ -13,12 +12,12 @@ export class GetTerm {
 }
 export class AddTerm {
   static readonly type = "[Vocabulary] Add term";
-  constructor(public payload: ITerm | IVerb | IPreposition | IName) {}
+  constructor(public payload: ITerm) {}
 }
 
 export class UpdateTerm {
   static readonly type = "[Vocabulary] Update term";
-  constructor(public payload: ITerm | IVerb | IPreposition | IName) {}
+  constructor(public payload: ITerm) {}
 }
 
 export class DeleteTerm {

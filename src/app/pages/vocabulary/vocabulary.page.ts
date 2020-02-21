@@ -2,13 +2,12 @@ import { Component, OnInit, NgZone } from "@angular/core";
 import { Select, Store } from "@ngxs/store";
 import { VocabularyState } from "src/shared/vocabulary/vocabulary.state";
 import { Observable } from "rxjs";
-import { ITerm, IPreposition } from "src/app/models/term.models";
-import { IVerb } from "src/app/models/verb.models";
-import { ESorts } from "src/app/models/sort.models";
 import { AlertController, NavController } from "@ionic/angular";
 import { SetSortOrder } from "src/shared/vocabulary/vocabulary.actions";
 import * as _ from "lodash";
 import { Router } from "@angular/router";
+import { ITerm } from 'src/app/models/models';
+import { ESorts } from 'src/app/models/enums';
 
 @Component({
   selector: "app-vocabulary",
@@ -16,9 +15,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./vocabulary.page.scss"]
 })
 export class VocabularyPage implements OnInit {
-  @Select(VocabularyState.terms) terms$: Observable<
-    (ITerm | IVerb | IPreposition)[]
-  >;
+  @Select(VocabularyState.terms) terms$: Observable<ITerm[]>;
   @Select(VocabularyState.sortedTerms) sortedTerms$: Observable<any[]>;
   @Select(VocabularyState.activeSort) activeSort$: Observable<string>;
 
@@ -29,7 +26,7 @@ export class VocabularyPage implements OnInit {
     private store: Store,
     private ngZone: NgZone,
     private navCtrl: NavController,
-    private alertCtrl: AlertController,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {}

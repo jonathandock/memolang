@@ -1,10 +1,9 @@
-import { IPreposition, ITerm } from "src/app/models/term.models";
-import { IVerb } from "src/app/models/verb.models";
+import { ITerm } from "src/app/models/models";
 
 export class VocabularyStateModel {
   initialised: boolean;
-  terms: (ITerm | IVerb | IPreposition)[];
-  currentTerm?: ITerm | IVerb | IPreposition;
+  terms: ITerm[];
+  currentTerm?: ITerm;
   sortedTerms?: any[];
   activeSort?: string;
   newTermForm: {

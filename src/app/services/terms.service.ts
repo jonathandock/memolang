@@ -5,25 +5,24 @@ import {
 } from "@angular/fire/firestore";
 import { Observable, from, of } from "rxjs";
 import { map, take, tap, catchError } from "rxjs/operators";
-import { IPreposition, ITerm, IName } from "../models/term.models";
-import { IVerb } from "../models/verb.models";
-
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { GoogleTranslateResponse, TranslateTextResponseList, TranslateTextResponseTranslation, TranslationObject } from '../models/translate.model';
+import {
+  GoogleTranslateResponse,
+  TranslateTextResponseList,
+  TranslateTextResponseTranslation,
+  TranslationObject
+} from "../models/translate.model";
+import { ITerm } from "../models/models";
 
 @Injectable({
   providedIn: "root"
 })
 export class TermsService {
-  private _terms: Observable<(ITerm | IVerb | IPreposition | IName)[]>;
-  private _termsCollection: AngularFirestoreCollection<
-    ITerm | IVerb | IPreposition
-  >;
+  private _terms: Observable<ITerm[]>;
+  private _termsCollection: AngularFirestoreCollection<ITerm>;
 
   constructor(private afs: AngularFirestore, private http: HttpClient) {
-    this._termsCollection = this.afs.collection<
-      ITerm | IVerb | IPreposition | IName
-    >("terms");
+    this._termsCollection = this.afs.collection<ITerm>("terms");
     this._terms = this._termsCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -38,7 +37,7 @@ export class TermsService {
   /**
    * Get all terms from Firebase database
    */
-  public termsStream(): Observable<(ITerm | IVerb | IPreposition | IName)[]> {
+  public termsStream(): Observable<ITerm[]> {
     return this._terms;
   }
 
@@ -53,9 +52,9 @@ export class TermsService {
    * Get specific term by id
    * @param id
    */
-  public get(id: string): Observable<ITerm | IVerb | IPreposition | IName> {
+  public get(id: string): Observable<ITerm> {
     return this._termsCollection
-      .doc<ITerm | IVerb | IPreposition>(id)
+      .doc<ITerm>(id)
       .valueChanges()
       .pipe(
         take(1),
@@ -74,7 +73,7 @@ export class TermsService {
    * Add a term to the collection
    * @param term
    */
-  public add(term: ITerm | IVerb | IPreposition | IName) {
+  public add(term: ITerm) {
     return from(this._termsCollection.add(term));
   }
 
@@ -82,7 +81,7 @@ export class TermsService {
    * Add a term to the collection
    * @param term
    */
-  public update(term: ITerm | IVerb | IPreposition | IName) {
+  public update(term: ITerm) {
     console.log(term);
     return from(this._termsCollection.doc(term.id).update(term));
   }
@@ -99,7 +98,9 @@ export class TermsService {
    * Translate a word to german with google translate API
    * @param translationObj
    */
-  public translate(translationObj: TranslationObject): Observable<TranslateTextResponseTranslation[]> {
+  public translate(
+    translationObj: TranslationObject
+  ): Observable<TranslateTextResponseTranslation[]> {
     const url =
       "https://google-translate1.p.rapidapi.com/language/translate/v2";
 
@@ -112,7 +113,7 @@ export class TermsService {
     };
 
     const httpParams = new HttpParams({ fromObject: translationObj as any });
-    const urlEncodedBody = httpParams.toString().replace(/\+/g, '%2B');
+    const urlEncodedBody = httpParams.toString().replace(/\+/g, "%2B");
 
     return this.http.post(url, urlEncodedBody, httpOptions).pipe(
       map((googleTranslateRes: GoogleTranslateResponse) => {
@@ -122,7 +123,7 @@ export class TermsService {
           return [];
         }
       }),
-      catchError((err) => {
+      catchError(err => {
         console.log(err);
         return of([]);
       })

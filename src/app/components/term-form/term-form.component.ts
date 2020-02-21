@@ -1,19 +1,18 @@
 import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { GLOBALS } from "src/environments/globals";
 import { FormGroup, Validators, FormBuilder, FormArray } from "@angular/forms";
-import {
-  ETermType,
-  EPrepositionType,
-  ITerm,
-  IName,
-  IPreposition
-} from "src/app/models/term.models";
-import { EGender } from "src/app/models/gender.models";
-import { EAuxiliary, EVerbType, IVerb } from "src/app/models/verb.models";
 import { Store } from "@ngxs/store";
 import { AddTerm, UpdateTerm } from "src/shared/vocabulary/vocabulary.actions";
 import { ModalController } from "@ionic/angular";
 import { QuickTranslation } from "src/app/models/translate.model";
+import { ITerm } from "src/app/models/models";
+import {
+  ETermType,
+  EGender,
+  EPrepositionType,
+  EAuxiliary,
+  EVerbType
+} from "src/app/models/enums";
 
 @Component({
   selector: "memolang-term-form",
@@ -21,7 +20,7 @@ import { QuickTranslation } from "src/app/models/translate.model";
   styleUrls: ["./term-form.component.scss"]
 })
 export class TermFormComponent implements OnInit {
-  @Input() term: ITerm | IPreposition | IVerb | IName;
+  @Input() term: ITerm;
   @Input() quickTranslation: QuickTranslation;
   @ViewChild("form", { static: false }) form: HTMLFormElement;
 
@@ -60,8 +59,7 @@ export class TermFormComponent implements OnInit {
       this.newTermForm.patchValue(this.term);
 
       if (this.term.type === ETermType.Name) {
-        const name = this.term as IName;
-        this.gender.setValue(name.gender);
+        this.gender.setValue(this.term.gender);
       }
     }
 

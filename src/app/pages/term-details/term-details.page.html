@@ -2,12 +2,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Details</ion-title>
     <ion-buttons slot="end">
       <ng-container *ngIf="term$ | async as term">
-        <ion-button (click)="editTerm(term)" color="dark">Edit</ion-button>
+        <ion-button (click)="editTerm(term)">Edit</ion-button>
       </ng-container>
     </ion-buttons>
   </ion-toolbar>
@@ -19,20 +19,15 @@
 
     <div class="ion-padding term__header section">
       <div>
-        <ng-container [ngSwitch]="term.type">
-          <ion-badge color="primary" *ngSwitchCase="'name'">{{term.type}}</ion-badge>
-          <ion-badge color="secondary" *ngSwitchCase="'verb'">{{term.type}}</ion-badge>
-          <ion-badge color="tertiary" *ngSwitchCase="'preposition'">{{term.type}}</ion-badge>
-          <ion-badge color="warning" *ngSwitchCase="'adverb'">{{term.type}}</ion-badge>
-          <ion-badge color="medium" *ngSwitchCase="'expression'">{{term.type}}</ion-badge>
-        </ng-container>
+        <ion-badge color="light">{{term.type}}</ion-badge>
       </div>
       
       <div class="term__translation">
         <span *ngIf="term.type === 'name' && term.gender && term.gender !== genderEnum.None">{{term.gender}}</span> {{term.translation}}
       </div>
-      <div class="term__plural" *ngIf="term.type === 'name' && term.plural">Plural: Die {{term.plural}}</div>
-      <div class="term__value">Translation: {{term.value}}</div>
+      
+      <div class="term__plural" *ngIf="term.type === 'name' && term.plural">die {{term.plural}}</div>
+      <div class="term__value"><ion-text color="medium"><b>Translation:</b> {{term.value}}</ion-text></div>
     </div>
 
     <ng-container *ngIf="term.type === 'verb'">
