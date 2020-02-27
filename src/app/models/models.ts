@@ -36,6 +36,7 @@ export interface ITerm {
    */
   examples?: string[];
   notes?: string;
+  termKnowledge?: ITermKnowledge;
   createdDate: number;
   lastModified: number;
 }
@@ -62,4 +63,31 @@ export interface IConjugation {
 export interface ISortedTerms {
   key: string;
   terms: ITerm[];
+}
+
+/**
+ * Term knowledge (Bound to quizz)
+ */
+export interface ITermKnowledge {
+  totalTries: number;
+  successTries: number;
+  failTries: number;
+  tries: ITry[];
+}
+
+/**
+ * Model of a try (quizz)
+ */
+export interface ITry {
+  date: number;
+  success: boolean;
+  guess: IQuizzResponse;
+}
+
+/**
+ * Quizz response model
+ */
+export interface IQuizzResponse {
+  try: string;
+  gender?: string;
 }

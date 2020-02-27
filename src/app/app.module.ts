@@ -21,6 +21,7 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule, FirestoreSettingsToken } from "@angular/fire/firestore";
 
 import { HttpClientModule } from '@angular/common/http';
+import { QuizzState } from 'src/shared/quizz/quizz.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,9 +30,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    NgxsModule.forRoot([VocabularyState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([VocabularyState, QuizzState], { developmentMode: !environment.production }),
     NgxsStoragePluginModule.forRoot({
-      key: VocabularyState
+      key: VocabularyState,
     }),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),

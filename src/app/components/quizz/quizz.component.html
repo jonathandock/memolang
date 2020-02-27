@@ -1,0 +1,32 @@
+<div class="quizz">
+  <form [formGroup]="quizzForm" (ngSubmit)="onSubmitQuizz(quizzForm.value)">
+    <div class="quizz__to-guess ion-padding-start">{{(termToGuess$ | async)?.value}}</div>
+
+    <ion-item *ngIf="(termToGuess$ | async)?.type === 'name' && (termToGuess$ | async)?.gender !== 'none'">
+      <ion-label>Gender</ion-label>
+      <ion-select placeholder="Select One" [value]="quizzForm.controls.gender.value">
+        <ion-select-option [value]="gender" *ngFor="let gender of gendersList">{{gender}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item line="none">
+      <ion-input placeholder="Enter Input" formControlName="guess"></ion-input>
+      <ion-icon name="checkmark" color="success" *ngIf="(quizzSuccess$ | async)"></ion-icon>
+      <ion-icon name="close" color="danger" *ngIf="!(quizzSuccess$ | async) && (quizzSubmitted$ | async)"></ion-icon>
+      <ion-button fill="clear" type="submit" [disabled]="!quizzForm.valid || (quizzSubmitted$ | async)">
+        <ion-icon name="arrow-forward-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item *ngIf="!(quizzSuccess$ | async) && (quizzSubmitted$ | async)" lines="none">
+      <ion-label color="danger" class="ion-text-wrap">
+        Correct answer: <span *ngIf="(termToGuess$ | async)?.type === 'name' && (termToGuess$ | async)?.gender !== 'none'">{{(termToGuess$ | async)?.gender}}</span> {{(termToGuess$ | async)?.translation}}
+      </ion-label>
+    </ion-item>
+
+  </form>
+
+  <ion-item lines="none">
+    <ion-button (click)="getRandomTerm()">New word</ion-button>
+  </ion-item>
+</div>

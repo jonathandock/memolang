@@ -10,6 +10,7 @@ import { DashboardPage } from './dashboard.page';
 import { ListItemModule } from 'src/app/components/list-item/list-item.module';
 import { NewTermButtonModule } from 'src/app/components/new-term-button/new-term-button.module';
 import { QuickTranslateModule } from 'src/app/components/quick-translate/quick-translate.module';
+import { QuizzModule } from 'src/app/components/quizz/quizz.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { QuickTranslateModule } from 'src/app/components/quick-translate/quick-t
     DashboardPageRoutingModule,
     ListItemModule,
     NewTermButtonModule,
-    QuickTranslateModule
+    QuickTranslateModule,
+    QuizzModule
   ],
   declarations: [DashboardPage]
 })
